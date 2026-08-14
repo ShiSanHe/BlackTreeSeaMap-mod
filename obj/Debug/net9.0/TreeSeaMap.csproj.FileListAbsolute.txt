@@ -12,3 +12,4 @@
 /Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.pdb
 /Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.genruntimeconfig.cache
 /Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/ref/TreeSeaMap.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.sourcelink.json
