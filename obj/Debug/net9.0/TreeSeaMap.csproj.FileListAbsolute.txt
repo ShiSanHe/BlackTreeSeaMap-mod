@@ -1,0 +1,14 @@
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.csproj.AssemblyReference.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.AssemblyInfoInputs.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.AssemblyInfo.cs
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.csproj.CoreCompileInputs.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/bin/Debug/net9.0/TreeSeaMap.deps.json
+/Users/ryan/Documents/stsmods/heiliushuhai-map/bin/Debug/net9.0/TreeSeaMap.runtimeconfig.json
+/Users/ryan/Documents/stsmods/heiliushuhai-map/bin/Debug/net9.0/TreeSeaMap.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/bin/Debug/net9.0/TreeSeaMap.pdb
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/refint/TreeSeaMap.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.pdb
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/TreeSeaMap.genruntimeconfig.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/obj/Debug/net9.0/ref/TreeSeaMap.dll

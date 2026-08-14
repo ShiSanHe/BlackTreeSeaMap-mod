@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    黑流树海 网格地图 Mod 工程。
+    - 用 Microsoft.NET.Sdk（比 guzhenren 的 Godot.NET.Sdk 简单，explorer_mod 已验证可加载）
+    - net9.0 + EnableDynamicLoading
+    - 无 pck（资源全部运行时用 GodotSharp 构建），manifest: has_pck=false
+    - API 库用 RitsuLib（编译引用 ../lib/STS2-RitsuLib/STS2-RitsuLib.dll，运行时依赖声明在 manifest）
+
+    Sts2Dir / Sts2DataDir：
+    - 本机为 macOS arm64（Apple M4）。游戏托管程序集在 Contents/Resources/data_sts2_macos_arm64。
+    - 若换机器/平台，改这两处，或 import RitsuLib 的 Sts2PathDiscovery.props 自动发现。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>TreeSeaMap</RootNamespace>
+    <AssemblyName>TreeSeaMap</AssemblyName>
+
+    <Sts2Dir>/Users/ryan/Library/Application Support/Steam/steamapps/common/Slay the Spire 2/SlayTheSpire2.app/Contents/MacOS</Sts2Dir>
+    <Sts2DataDir>/Users/ryan/Library/Application Support/Steam/steamapps/common/Slay the Spire 2/SlayTheSpire2.app/Contents/Resources/data_sts2_macos_arm64</Sts2DataDir>
+  </PropertyGroup>
+
+  <!-- Microsoft.NET.Sdk 默认递归包含 source/**/*.cs，无需显式 Compile 项；排除测试工程（含其 obj 生成的 .cs） -->
+  <ItemGroup>
+    <Compile Remove="tests/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GodotSharp">
+      <HintPath>$(Sts2DataDir)/GodotSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SmartFormat">
+      <HintPath>$(Sts2DataDir)/SmartFormat.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="STS2-RitsuLib">
+      <HintPath>../lib/STS2-RitsuLib/STS2-RitsuLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

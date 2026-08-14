@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>黑流树海 · 地图拓扑预览</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#111;color:#ddd;margin:0;padding:20px;}
+  h1{font-size:18px;margin-top:0;}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:10px 0;font-size:13px;}
+  .controls label{display:flex;align-items:center;gap:6px;}
+  .controls input[type=number]{width:52px;background:#222;color:#eee;border:1px solid #555;padding:3px 6px;border-radius:4px;}
+  .controls input[type=range]{width:140px;}
+  button{background:#2d7;color:#000;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:bold;}
+  button:hover{background:#3e8;}
+  #stats{font-size:13px;color:#9cf;margin:8px 0;}
+  #stats b{color:#fff;}
+  .legend{font-size:12px;color:#aaa;margin-bottom:6px;}
+  .legend span{display:inline-block;margin-right:14px;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+  svg{background:#16181d;border:1px solid #333;border-radius:8px;}
+  text{font-family:ui-monospace,monospace;font-size:9px;fill:#99a;}
+</style>
+</head>
+<body>
+<h1>🌲 黑流树海 · 地图拓扑预览（空地图：节点+连接+起点+Boss，暂无事件）</h1>
+<div class="controls">
+  <label>宽 <input id="w" type="number" value="9" min="4" max="14"></label>
+  <label>高 <input id="h" type="number" value="9" min="4" max="14"></label>
+  <label>节点密度 <input id="occ" type="range" min="0.30" max="0.85" step="0.01" value="0.65"></label>
+  <label>路密度(额外连接) <input id="road" type="range" min="0" max="1" step="0.01" value="0.6"></label>
+  <label>种子 <input id="seed" type="number" value="1"></label>
+  <label>原版行动力 <select id="ap">
+    <option value="13">Act 3（13 行）</option>
+    <option value="14">Act 2（14 行）</option>
+    <option value="15" selected>Act 1（15 行）</option>
+  </select></label>
+  <button id="rand">🎲 随机种子</button>
+  <button id="gen">生成</button>
+  <label><input id="showpath" type="checkbox" checked> 最短路</label>
+  <label><input id="showlabel" type="checkbox" checked> 坐标</label>
+</div>
+<div class="legend">
+  <span><span class="dot" style="background:#f55"></span>Boss(出口)</span>
+  <span><span class="dot" style="background:#5c5"></span>起点</span>
+  <span><span class="dot" style="background:#66aaff"></span>普通节点</span>
+  <span><span class="dot" style="background:#ffa"></span>枝岔点(≥3连接)</span>
+</div>
+<div id="stats"></div>
+<svg id="svg" width="920" height="640"></svg>
+<script>
+"use strict";
+const ADJ=[[1,0],[-1,0],[0,1],[0,-1]];
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const key=(x,y)=>x+","+y;
+const parse=k=>k.split(",").map(Number);
+
+function genMap(w,h,occ,road,seed,ap){
+  const rng=mulberry32(seed>>>0);
+  const occSet=new Set();
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++) if(rng()<occ) occSet.add(key(x,y));
+  const boss=key(Math.floor(w/2),0);
+  occSet.add(boss);
+  const nb4=k=>{const[x,y]=parse(k);const r=[];for(const[dx,dy]of ADJ){const nx=x+dx,ny=y+dy;if(nx>=0&&nx<w&&ny>=0&&ny<h)r.push(key(nx,ny));}return r;};
+  // 连通修复：把分散组件用曼哈顿路径桥接
+  const compOf=(seedK,uni)=>{const comp=new Set([seedK]);const st=[seedK];while(st.length){const n=st.pop();for(const nb of nb4(n))if(uni.has(nb)&&!comp.has(nb)){comp.add(nb);st.push(nb);}}return comp;};
+  const comps=[];const uni=new Set(occSet);
+  while(uni.size){const s=uni.values().next().value;const c=compOf(s,uni);comps.push(c);for(const k of c)uni.delete(k);}
+  const main=comps[0];
+  for(let i=1;i<comps.length;i++){
+    const comp=comps[i];let best=null;
+    for(const a of main)for(const b of comp){const[ax,ay]=parse(a),[bx,by]=parse(b);const d=Math.abs(ax-bx)+Math.abs(ay-by);if(!best||d<best[0])best=[d,a,b];}
+    let[x,y]=parse(best[1]);const[tx,ty]=parse(best[2]);
+    while(!(x===tx&&y===ty)){if(x!==tx)x+=tx>x?1:-1;else y+=ty>y?1:-1;const k=key(x,y);if(!occSet.has(k)){occSet.add(k);main.add(k);}}
+    for(const k of comp)main.add(k);
+  }
+  // Wilson 随机生成树（保证连通）
+  const inTree=new Set([boss]);const edges=[];const edgeSet=new Set();
+  const addE=(a,b)=>{const es=a<b?`${a}|${b}`:`${b}|${a}`;if(edgeSet.has(es))return;edgeSet.add(es);edges.push([a,b]);inTree.add(a);inTree.add(b);};
+  const occArr=[...occSet];
+  let guard=0;
+  while(inTree.size<occArr.length&&guard<occArr.length*50){
+    guard++;
+    const cands=occArr.filter(k=>!inTree.has(k));
+    let s=cands[Math.floor(rng()*cands.length)];
+    const path=[s];const seen=new Map([[s,0]]);
+    while(!inTree.has(s)){
+      const nbs=nb4(s).filter(k=>occSet.has(k));
+      const nb=nbs[Math.floor(rng()*nbs.length)];
+      if(seen.has(nb)){const idx=seen.get(nb);for(let j=idx+1;j<path.length;j++)seen.delete(path[j]);path.length=idx+1;}
+      else{seen.set(nb,path.length);path.push(nb);}
+      s=path[path.length-1];
+    }
+    for(let j=0;j<path.length-1;j++)addE(path[j],path[j+1]);
+  }
+  // 路密度：在生成树基础上补额外连接（枝岔更多、可走路更多；形成的环是副产品）
+  if(road>0){
+    for(const k of occSet){
+      const[x,y]=parse(k);
+      for(const[dx,dy]of ADJ){
+        const nk=key(x+dx,y+dy);
+        if(!occSet.has(nk))continue;
+        const es=k<nk?`${k}|${nk}`:`${nk}|${k}`;
+        if(edgeSet.has(es))continue;
+        if(rng()<road)addE(k,nk);
+      }
+    }
+  }
+  const adj={};for(const k of occSet)adj[k]=new Set();
+  for(const[a,b]of edges){adj[a].add(b);adj[b].add(a);}
+  // 距 Boss 距离 + 起点（距 Boss 最远的节点）
+  const dist={[boss]:0};const q=[boss];
+  for(let i=0;i<q.length;i++){const n=q[i];for(const nb of adj[n])if(!(nb in dist)){dist[nb]=dist[n]+1;q.push(nb);}}
+  // 起点：距 Boss 最远但最短路 ≤ 行动力 AP 的节点（保证起步到 Boss 不超 AP）
+  let start=null;
+  for(const k of occSet){if(k===boss)continue;if(dist[k]<=ap&&(!start||dist[k]>dist[start]))start=k;}
+  if(!start)for(const k of occSet){if(k===boss)continue;if(!start||dist[k]>dist[start])start=k;}
+  // 连通校验
+  const seen=new Set([boss]);const qq=[boss];
+  for(let i=0;i<qq.length;i++)for(const nb of adj[qq[i]])if(!seen.has(nb)){seen.add(nb);qq.push(nb);}
+  const connected=seen.size===occSet.size;
+  // 最短路
+  const prev={};const q3=[start];prev[start]=null;
+  for(let i=0;i<q3.length;i++){const n=q3[i];if(n===boss)break;for(const nb of adj[n])if(!(nb in prev)){prev[nb]=n;q3.push(nb);}}
+  const path=[];let cur=boss;while(cur!==null){path.unshift(cur);cur=prev[cur];}
+  // 枝岔点
+  let forks=0;for(const k in adj)if(adj[k].size>=3)forks++;
+  return{nodes:occSet,edges,start,boss,dist:dist[start],connected,path,adj,forks,w,h};
+}
+
+const svg=document.getElementById("svg");
+const statsEl=document.getElementById("stats");
+function draw(){
+  const w=+document.getElementById("w").value,h=+document.getElementById("h").value;
+  const occ=+document.getElementById("occ").value,road=+document.getElementById("road").value,seed=+document.getElementById("seed").value,ap=+document.getElementById("ap").value;
+  const m=genMap(w,h,occ,road,seed,ap);
+  const avg=(m.edges.length*2/m.nodes.size).toFixed(1);
+  const loops=m.edges.length-m.nodes.size+1;
+  const ok=m.dist<=ap;
+  statsEl.innerHTML="节点 <b>"+m.nodes.size+"</b> · 边 <b>"+m.edges.length+"</b> · 平均度 <b>"+avg+"</b> · 环 <b>"+loops+"</b> · 连通 <b>"+(m.connected?"✓":"✗ 出错")+"</b> · 枝岔点 <b>"+m.forks+"</b> · 起点→Boss 最短路 <b>"+m.dist+"</b> 步 / 行动力 <b>"+ap+"</b> <b style='color:"+(ok?"#5c5":"#f55")+"'>"+(ok?"✓ 可到":"✗ 超AP")+"</b> · 起点("+parse(m.start)+") · Boss("+parse(m.boss)+")";
+  const SW=920,SH=640,margin=46;
+  const cell=Math.min((SW-2*margin)/(m.w-1||1),(SH-2*margin)/(m.h-1||1));
+  const px=k=>{const[x,y]=parse(k);return{x:margin+x*cell,y:margin+y*cell};};
+  let s="";
+  for(const[a,b]of m.edges){const A=px(a),B=px(b);s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#4a5568" stroke-width="3"/>`;}
+  const showPath=document.getElementById("showpath").checked;
+  if(showPath&&m.path.length>1){
+    const pts=m.path.map(px).map(p=>p.x+","+p.y).join(" ");
+    s+=`<polyline points="${pts}" fill="none" stroke="#ffb347" stroke-width="4" stroke-linejoin="round" opacity="0.9"/>`;
+  }
+  const showLabel=document.getElementById("showlabel").checked;
+  for(const k of m.nodes){
+    const[x,y]=parse(k);const P=px(k);
+    const isB=k===m.boss,isS=k===m.start,fork=m.adj[k].size>=3;
+    const r=isB||isS?14:10;
+    const fill=isB?"#f55":(isS?"#5c5":"#66aaff");
+    s+=`<circle cx="${P.x}" cy="${P.y}" r="${r}" fill="${fill}" ${fork&&!isB&&!isS?'stroke="#ffa" stroke-width="2"':""}><title>(${x},${y}) 度${m.adj[k].size}${fork?"·枝岔":""}</title></circle>`;
+    if(showLabel)s+=`<text x="${P.x}" y="${P.y+(isB||isS?r+12:r+10)}" text-anchor="middle">${isB?"B":(isS?"S":`${x},${y}`)}</text>`;
+  }
+  svg.innerHTML=s;
+}
+document.getElementById("gen").addEventListener("click",draw);
+document.getElementById("rand").addEventListener("click",()=>{document.getElementById("seed").value=Math.floor(Math.random()*100000);draw();});
+document.getElementById("ap").addEventListener("change",draw);
+for(const id of["w","h","occ","road","seed","showpath","showlabel"])document.getElementById(id).addEventListener("input",draw);
+draw();
+</script>
+</body>
+</html>

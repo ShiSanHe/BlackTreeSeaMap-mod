@@ -1,0 +1,14 @@
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/bin/Debug/net10.0/TreeSeaMap.CoreTests
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/bin/Debug/net10.0/TreeSeaMap.CoreTests.deps.json
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/bin/Debug/net10.0/TreeSeaMap.CoreTests.runtimeconfig.json
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/bin/Debug/net10.0/TreeSeaMap.CoreTests.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/bin/Debug/net10.0/TreeSeaMap.CoreTests.pdb
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.AssemblyInfoInputs.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.AssemblyInfo.cs
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.csproj.CoreCompileInputs.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/refint/TreeSeaMap.CoreTests.dll
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.pdb
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/TreeSeaMap.CoreTests.genruntimeconfig.cache
+/Users/ryan/Documents/stsmods/heiliushuhai-map/tests/TreeSeaMap.CoreTests/obj/Debug/net10.0/ref/TreeSeaMap.CoreTests.dll

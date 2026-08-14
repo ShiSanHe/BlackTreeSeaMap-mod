@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 纯逻辑测试控制台（不依赖游戏 dll），引用 source/Map/** 源码 -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- 纯逻辑测试用本机 .NET 10 runtime；mod 主项目仍为 net9.0（游戏运行时） -->
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../source/Map/**/*.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "W7n7U7omz+4=",
+  "success": true,
+  "projectFilePath": "/Users/ryan/Documents/stsmods/heiliushuhai-map/TreeSeaMap.csproj",
+  "expectedPackageFiles": [
+    "/Users/ryan/.nuget/packages/microsoft.netcore.app.ref/9.0.16/microsoft.netcore.app.ref.9.0.16.nupkg.sha512",
+    "/Users/ryan/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.16/microsoft.aspnetcore.app.ref.9.0.16.nupkg.sha512"
+  ],
+  "logs": []
+}
