@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TreeSeaMap")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9e51b3a96678ae139f54b167b7b1baa676bd24e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1d7beb34a55bd98e0f673edd9f9969d5fc8b5d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("TreeSeaMap")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TreeSeaMap")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
